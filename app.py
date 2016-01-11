@@ -1,15 +1,17 @@
 #import dependencies
+from datetime import datetime
 from flask import Flask, request, render_template
-# from flask.ext.script import Manager
+from flask.ext.script import Manager
 from flask.ext.bootstrap import Bootstrap
+from flask.ext.moment import Moment
+
 
 #create application object instance
 app = Flask(__name__)
 
 #application instance passed to the constructor
-# manager = Manager(app)
-
-#application instance is passed to the constructor
+manager = Manager(app)
+moment = Moment(app)
 bootstrap = Bootstrap(app)
 
 # @app.route('/')
@@ -17,9 +19,13 @@ bootstrap = Bootstrap(app)
 #     user_agent = request.headers.get('User-Agent')
 #     return '<p>Your browser is %s</p>' % user_agent
 
-@app.route('/index')
+@app.route('/')
 def index():
-    return render_template('index.html')
+  return render_template('index.html', current_time=datetime.utcnow())
+
+# @app.route('/index')
+# def index():
+#     return render_template('index.html')
 
 @app.route('/user/<name>')
 def user(name):
@@ -36,4 +42,4 @@ def internal_server_error(e):
 
 #run application instance
 if __name__ == '__main__':
-    app.run(debug=True)
+    manager.run()
